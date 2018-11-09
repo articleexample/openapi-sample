@@ -1,0 +1,281 @@
+---
+# This is a sample Swagger spec, describing a simple API as a starting point.  
+swagger: "2.0"
+info:
+  description: Sample API generation from specification
+  version: 1.0.0
+  title: Code geneeratiion sample 
+host: localhost:8080
+basePath: /
+schemes:
+- http
+
+# Tags organize operations into groups for presentation in the Swagger UI.
+# Each tag has an optional description, which the Swagger UI will display in 
+# the tag group header.
+# Tags organize operations into groups for presentation in the Swagger UI.
+# Each tag has an optional description, which the Swagger UI will display in 
+# the tag group header.
+
+tags:
+- name: PersonObject
+  description: A person, accessed by its id
+- name: FamilyObject
+  description: A family of persons
+
+paths:
+
+  # Each Path Item Object describes a resource, containing a set of operations
+  # at a specified path.  The Path Item object can define parameters and 
+  # responses common all of its contained operations.
+  /people:
+
+    # Operations are identified by an HTTP method.  
+    post:
+      tags:
+      - PersonObject
+      description: Saves a person .
+      operationId: savePerson
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      
+      parameters:
+      - in: body
+        name: body
+        description: Person object that needs to be added to the store
+        required: true
+        schema:
+          $ref: '#/definitions/PersonObject'
+      responses:
+        200:
+          description: Successful response, with a representation of the Tax Filing.
+          schema:
+            # Reference to a Schema Object described in 'definitions' section
+            $ref: "#/definitions/PersonObject"
+          examples:
+            # Example message, keyed by media type
+            application/json :
+              {
+                title : Mr,
+                gender: Male,
+                firstName : First,
+                lastName : Last,
+                ssn : 403-38-6993,
+                phone : 202-555-0112,
+                email : email@someemail.com,
+                id : id,
+                dob: 2018-09-23
+              }
+        304:
+          description: The requested tax filing was not saved.
+
+
+  # Each Path Item Object describes a resource, containing a set of operations
+  # at a specified path.  The Path Item object can define parameters and 
+  # responses common all of its contained operations.
+  /people/{id}:
+
+    # Operations are identified by an HTTP method.  
+    get:
+      tags:
+      - PersonObject
+      description: Retrieves a Person having the specified id.
+      operationId: getPerson
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of the person
+        required: true
+        type: string
+        maxLength: 10
+      responses:
+        200:
+          description: Successful response, with a representation of save.
+          schema:
+            # Reference to a Schema Object described in 'definitions' section
+            $ref: "#/definitions/PersonObject"
+          examples:
+            # Example message, keyed by media type
+            application/json :
+              {
+               title : Mr,
+                gender: Male,
+                firstName : First,
+                lastName : Last,
+                ssn : 403-38-6993,
+                phone : 202-555-0112,
+                email : email@someemail.com,
+                id : id,
+                dob: 2018-09-23
+              }
+        404:
+          description: The person was not found.
+
+  # Each Path Item Object describes a resource, containing a set of operations
+  # at a specified path.  The Path Item object can define parameters and 
+  # responses common all of its contained operations.
+  /family:
+
+    # Operations are identified by an HTTP method.  
+    post:
+      tags:
+      - FamilyObject
+      description: Saves a FamilyObject .
+      operationId: saveFamily
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      
+      parameters:
+      - in: body
+        name: body
+        description: Family object that needs to be added to the store
+        required: true
+        schema:
+          $ref: '#/definitions/FamilyObject'
+      responses:
+        200:
+          description: Successful response, with a representation of the Tax Filing.
+          schema:
+            # Reference to a Schema Object described in 'definitions' section
+            $ref: "#/definitions/FamilyObject"
+        
+        304:
+          description: The requested tax filing was not saved.
+
+
+  # Each Path Item Object describes a resource, containing a set of operations
+  # at a specified path.  The Path Item object can define parameters and 
+  # responses common all of its contained operations.
+  /family/{id}:
+
+    # Operations are identified by an HTTP method.  
+    get:
+      tags:
+      - FamilyObject
+      description: Retrieves a FamilyObject having the specified id.
+      operationId: getFamily
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: id of the person
+        required: true
+        type: string
+        maxLength: 10
+      responses:
+        200:
+          description: Successful response, with a representation of save.
+          schema:
+            # Reference to a Schema Object described in 'definitions' section
+            $ref: "#/definitions/FamilyObject"
+         
+        404:
+          description: The family was not found.
+
+
+
+
+
+
+# The definitions section contains a set of named Schema Objects.  Each schema
+# object describes a reusable data type, which can be reference by name.
+definitions:
+
+  PersonObject:
+    type: object
+    description: A person
+    required: [title, gender, firstName, lastName, id]
+    properties:
+      title:
+        type: string
+        enum: [Dr, Sir, Mr, Ms, Mrs]
+      gender:
+        type: string
+        enum: [Male, Female]
+      firstName:
+        type: string
+        minLength: 2
+        maxLength: 20
+      lastName:
+        type: string
+        minLength: 1
+        maxLength: 20
+      ssn:
+        type: string
+        pattern: '^\d{3}-\d{2}-\d{4}$'
+        example: '403-38-6993'
+      phone:
+        type: string
+        pattern: '^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$'
+        example: '202-555-0112'
+      email:
+        type: string
+        format: email
+      id:
+        type: string
+        minLength: 5
+        maxLength: 20
+      dob:
+        type: string
+        format: date
+        example: '2018-09-23'
+
+  FamilyObject:
+    type: object
+    description: A family
+    required: [id, address, members]
+    properties:
+      id:
+        type: string
+        minLength: 5
+        maxLength: 20
+      address:
+         $ref: '#/definitions/AddressObject'
+      members:
+         type: array
+         items:
+              $ref: '#/definitions/PersonObject'
+              
+  AddressObject:
+    type: object
+    description: A address
+    required: [city, state, line1]
+    properties:
+      city:
+        type: string
+        minLength: 5
+        maxLength: 20
+        example: 'Fremont'
+      state:
+        type: string
+        minLength: 2
+        maxLength: 20
+        example: 'CA'
+      line1:
+        type: string
+        minLength: 5
+        maxLength: 20
+      line2:
+        type: string
+        minLength: 5
+        maxLength: 20
+      line3:
+        type: string
+        minLength: 5
+        maxLength: 20
+
+
+
+       
+        
