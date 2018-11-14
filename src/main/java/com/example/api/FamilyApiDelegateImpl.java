@@ -1,7 +1,6 @@
 package com.example.api;
 
 import java.time.LocalDate;
-import java.util.concurrent.CompletableFuture;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
